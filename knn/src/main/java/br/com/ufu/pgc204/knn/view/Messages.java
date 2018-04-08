@@ -17,9 +17,9 @@ public class Messages {
 		JOptionPane.showMessageDialog(frame, message, bundle.getString("titulo"), JOptionPane.INFORMATION_MESSAGE);
 	}
 
-	public static int showQuestionMessage(Component frame, String mensagem, Object[] opcoes) {
+	public static int showQuestionMessage(Component frame, String mensagem, Object[] options) {
 		return JOptionPane.showOptionDialog(frame, mensagem, bundle.getString("titulo"), JOptionPane.YES_NO_OPTION,
-				JOptionPane.QUESTION_MESSAGE, null, opcoes, opcoes[1]);
+				JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
 	}
 
 	public static void showWarningMessage(Component frame, String message) {

@@ -11,12 +11,11 @@ import java.awt.event.WindowListener;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JProgressBar;
 import javax.swing.JWindow;
 
 /**
- * Esta classe gerencia uma tela de splash.
+ * Tela de splash para a aplicacao.
  * 
  * @author Dali Freire <i>dalifreire@gmail.com</i>
  * @since 04/2018
@@ -44,14 +43,14 @@ public class SplashWindow extends JWindow implements WindowListener {
 	/**
 	 * Exibe e remove a tela de splash de acordo com o tempo temo passado.
 	 * 
-	 * @param tempo
+	 * @param sleepTime
 	 *            - int que informa o tempo de exibicao, em milisegundos, da tela de
 	 *            splash.
 	 * @return void
 	 */
-	public void show(int tempo) {
+	public void show(int sleepTime) {
 		this.open();
-		this.sleep(tempo);
+		this.sleep(sleepTime);
 		this.close();
 	}
 
@@ -75,23 +74,19 @@ public class SplashWindow extends JWindow implements WindowListener {
 	/**
 	 * Aguarda um tempo em milisegundos
 	 * 
-	 * @param tempo
-	 *            int que representa o tempo, em milisegundos, que ser� aguardado.
+	 * @param sleepTime
+	 *            int que representa o tempo, em milisegundos, que sera aguardado.
 	 * @exception InterruptedException
 	 * @exception Exception
 	 * @return void
 	 */
-	public void sleep(int tempo) {
+	public void sleep(int sleepTime) {
 		try {
-			Thread.sleep(tempo);
+			Thread.sleep(sleepTime);
 		} catch (InterruptedException ie) {
 			ie.printStackTrace();
-			JOptionPane.showMessageDialog(null, " Erro 00 - Falha no sleep do Splash ", " Erro ",
-					JOptionPane.ERROR_MESSAGE);
 		} catch (Exception e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, " Erro 00 - Falha no sleep do Splash ", " Erro ",
-					JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -129,7 +124,7 @@ public class SplashWindow extends JWindow implements WindowListener {
 		/*
 		 * exemplo de funcionamento
 		 */
-		SplashWindow splash = new SplashWindow("imagens\\fundo.jpg");
+		SplashWindow splash = new SplashWindow("/br/com/ufu/pgc204/knn/images/knn.png");
 		splash.show(5000);
 	}
 
@@ -184,5 +179,5 @@ public class SplashWindow extends JWindow implements WindowListener {
 	 */
 	public void windowIconified(WindowEvent windowevent) {
 	}
-	
+
 }
