@@ -35,7 +35,7 @@ public class ZScore {
 	public Double calculate() {
 		double avg = new Average(this.values).calculate();
 		double std = new StandardDeviation(this.values).calculate();
-		return (this.value - avg) / std;
+		return calculate(this.value, avg, std);
 	}
 
 	public Double calculate(double value, double avg, double std) {
