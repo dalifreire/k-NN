@@ -3,7 +3,7 @@
 
 # k-NN
 
-O k-NN (do ingês: k Nearest Neighboors), é um algoritmo utilizado para resolver problemas de classificação. A idéia principal do k-NN é determinar a classe de uma determinada amostra baseado nas suas amostras vizinhas mais próximas.
+O k-NN (do inglês: k Nearest Neighboors), é um algoritmo utilizado para resolver problemas de classificação. A idéia principal do k-NN é determinar a classe de uma determinada amostra baseado nas suas amostras vizinhas mais próximas.
 
 
 
