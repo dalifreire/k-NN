@@ -1,5 +1,6 @@
 package br.com.ufu.pgc204.knn.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -15,6 +16,6 @@ public class SampleDto {
 	@Getter
 	private String className;
 	@Getter
-	private List<Double> attributes;
+	private List<Double> attributes = new ArrayList<Double>();
 
 }

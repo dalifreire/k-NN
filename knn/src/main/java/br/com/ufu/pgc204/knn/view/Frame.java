@@ -138,7 +138,7 @@ public class Frame extends JFrame {
 		if (this.txtAmostras == null) {
 			this.txtAmostras = new JTextField();
 			this.txtAmostras.setEditable(false);
-			this.txtAmostras.setText(bundle.getString("txtAmostras.text") + ":");
+			this.txtAmostras.setText(bundle.getString("txtAmostras.text"));
 			this.txtAmostras.setPreferredSize(new Dimension(200, 20));
 		}
 		return txtAmostras;

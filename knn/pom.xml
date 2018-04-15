@@ -13,7 +13,9 @@
 
 		<commons.lang.version>3.7</commons.lang.version>
 		<commons.io.version>2.6</commons.io.version>
+		<commons.math.version>3.6.1</commons.math.version>
 		<lombok.version>1.16.20</lombok.version>
+		<junit.version>4.12</junit.version>
 
 	</properties>
 
@@ -36,6 +38,22 @@
 			<artifactId>lombok</artifactId>
 			<version>${lombok.version}</version>
 		</dependency>
+
+
+		<!-- test -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.apache.commons</groupId> -->
+<!-- 			<artifactId>commons-math3</artifactId> -->
+<!-- 			<version>${commons.math.version}</version> -->
+<!-- 			<scope>test</scope> -->
+<!-- 		</dependency> -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+
 
 	</dependencies>
 

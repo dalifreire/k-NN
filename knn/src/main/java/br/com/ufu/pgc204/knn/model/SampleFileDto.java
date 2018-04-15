@@ -5,16 +5,18 @@ import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
 @AllArgsConstructor
 public class SampleFileDto {
 
 	@Getter
 	private Integer numberOfSamples;
 	@Getter
-	private Integer numberOfAttributes;
+	private Integer attributesPerSample;
+	@Getter
+	private double[][] attributes;
+	@Getter
+	private double[][] attributesZscore;
 	@Getter
 	private List<SampleDto> samples = new ArrayList<SampleDto>();
 

@@ -21,6 +21,7 @@ import javax.swing.UIManager;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import br.com.ufu.pgc204.knn.math.ZScore;
 import br.com.ufu.pgc204.knn.model.SampleDto;
 import br.com.ufu.pgc204.knn.model.SampleFileDto;
 import br.com.ufu.pgc204.knn.view.DialogAbout;
@@ -86,6 +87,11 @@ public class FrameController {
 				btnSelectSamplesFile();
 			}
 		});
+		this.frame.getTxtAmostras().addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				frame.getBtnSearch().doClick();
+			}
+		});
 
 		/* registra o evento/acao ao clicar no botao 'executar' */
 		this.frame.getBtnExecute().addActionListener(new ActionListener() {
@@ -99,15 +105,30 @@ public class FrameController {
 	 * Exibe janela para selecao do arquivo de amostras.
 	 */
 	private void btnSelectSamplesFile() {
-		JFileChooser fileChooser = new JFileChooser(".");
-		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		fileChooser.setMultiSelectionEnabled(false);
-		fileChooser.showOpenDialog(this.frame);
-		File selectedFile = fileChooser.getSelectedFile();
-		if (selectedFile != null) {
-			this.frame.getTxtAmostras().setText(selectedFile.getAbsolutePath());
-		} else {
+		try {
+
+			JFileChooser fileChooser = new JFileChooser(".");
+			fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			fileChooser.setMultiSelectionEnabled(false);
+			fileChooser.showOpenDialog(this.frame);
+			File selectedFile = fileChooser.getSelectedFile();
+			if (selectedFile != null) {
+
+				String sampleFile = FileUtils.readFileToString(selectedFile, StandardCharsets.UTF_8);
+				this.frame.getTxtAmostras().setText(selectedFile.getAbsolutePath());
+				this.frame.getTextAreaResults().setText(sampleFile);
+
+			} else {
+
+				this.frame.getTxtAmostras().setText(this.bundle.getString("txtAmostras.text"));
+				this.frame.getTextAreaResults().setText("");
+
+			}
+
+		} catch (Exception e) {
+			Messages.showErrorMessage(this.frame, this.bundle.getString("msg.falha.carregar.arquivo.amostras"));
 			this.frame.getTxtAmostras().setText("");
+			this.frame.getTextAreaResults().setText("");
 		}
 	}
 
@@ -118,6 +139,7 @@ public class FrameController {
 		if (checkFields()) {
 
 			SampleFileDto sampleFile = readSampleFile();
+			System.out.println(sampleFile);
 			Integer kfold = Integer.parseInt(this.frame.getTxtKFold().getText());
 
 			// TODO
@@ -133,21 +155,36 @@ public class FrameController {
 		try {
 
 			File samplesFile = new File(this.frame.getTxtAmostras().getText());
-			List<String> rows = FileUtils.readLines(samplesFile, StandardCharsets.UTF_8);
-			String[] header = StringUtils.split(rows.get(0), " ");
+			List<String> linesFile = FileUtils.readLines(samplesFile, StandardCharsets.UTF_8);
+			String[] header = StringUtils.split(linesFile.get(0), " ");
+			Integer numberOfSamples = Integer.parseInt(header[0]);
+			Integer attributesPerSample = Integer.parseInt(header[1]);
 
+			double[][] attributes = new double[attributesPerSample][numberOfSamples];
 			List<SampleDto> samples = new ArrayList<SampleDto>();
-			for (int i = 1; i < rows.size(); i++) {
+			for (int i = 1; i < linesFile.size(); i++) {
 
-				List<Double> attributes = new ArrayList<Double>();
-				String[] row = StringUtils.split(rows.get(i), " ");
-				for (int j = 0; j < (row.length - 1); j++) {
-					attributes.add(Double.parseDouble(row[j]));
+				List<Double> sampleAttr = new ArrayList<Double>();
+				String[] sample = StringUtils.split(linesFile.get(i), " ");
+				for (int j = 0; j < (sample.length - 1); j++) {
+
+					double value = Double.parseDouble(sample[j]);
+					sampleAttr.add(value);
+					attributes[j][i - 1] = value;
 				}
-				samples.add(new SampleDto(row[row.length - 1], attributes));
+				samples.add(new SampleDto(sample[sample.length - 1], sampleAttr));
 			}
 
-			return new SampleFileDto(Integer.parseInt(header[0]), Integer.parseInt(header[1]), samples);
+			double[][] attributesZscore = new double[attributesPerSample][numberOfSamples];
+			for (int i = 0; i < attributesPerSample; i++) {
+				for (int j = 0; j < attributes[i].length; j++) {
+
+					double zscore = new ZScore(attributes[i][j], attributes[i]).calculate();
+					attributesZscore[i][j] = zscore;
+				}
+			}
+
+			return new SampleFileDto(numberOfSamples, attributesPerSample, attributes, attributesZscore, samples);
 
 		} catch (Exception e) {
 			e.printStackTrace();
