@@ -11,6 +11,7 @@ import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -21,6 +22,8 @@ import javax.swing.UIManager;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import br.com.ufu.pgc204.knn.KNN;
+import br.com.ufu.pgc204.knn.math.EuclideanDistance;
 import br.com.ufu.pgc204.knn.math.ZScore;
 import br.com.ufu.pgc204.knn.model.SampleDto;
 import br.com.ufu.pgc204.knn.model.SampleFileDto;
@@ -117,6 +120,7 @@ public class FrameController {
 				String sampleFile = FileUtils.readFileToString(selectedFile, StandardCharsets.UTF_8);
 				this.frame.getTxtAmostras().setText(selectedFile.getAbsolutePath());
 				this.frame.getTextAreaResults().setText(sampleFile);
+				this.frame.getScrollPaneResults().revalidate();
 
 			} else {
 
@@ -138,11 +142,27 @@ public class FrameController {
 	private void btnExecute() {
 		if (checkFields()) {
 
-			SampleFileDto sampleFile = readSampleFile();
-			System.out.println(sampleFile);
+			SampleFileDto samples = readSampleFile();
 			Integer kfold = Integer.parseInt(this.frame.getTxtKFold().getText());
+			Integer k = Integer.parseInt(this.frame.getTxtNumeroVizinhos().getText());
 
-			// TODO
+			if (samples.getNumberOfSamples() % kfold == 0) {
+
+				// TODO
+				List<Double> sample = Arrays.asList(4.9, 3.0, 1.4, 0.2);
+
+				KNN classifier = new KNN(samples);
+				String className = classifier.classify(sample, new EuclideanDistance(), k);
+				List<SampleDto> kElements = classifier.kElements(sample, new EuclideanDistance(), k);
+				System.out.println(kElements);
+				
+			} else {
+
+				String msg = MessageFormat.format(this.bundle.getString("msg.informe.valor.divisor.para.kfold"),
+						this.bundle.getString("lblKFold.text"), samples.getNumberOfSamples());
+				Messages.showErrorMessage(this.frame, msg);
+
+			}
 		}
 	}
 
@@ -154,43 +174,72 @@ public class FrameController {
 	private SampleFileDto readSampleFile() {
 		try {
 
-			File samplesFile = new File(this.frame.getTxtAmostras().getText());
-			List<String> linesFile = FileUtils.readLines(samplesFile, StandardCharsets.UTF_8);
-			String[] header = StringUtils.split(linesFile.get(0), " ");
+			File file = new File(this.frame.getTxtAmostras().getText());
+			List<String> fileString = FileUtils.readLines(file, StandardCharsets.UTF_8);
+
+			String[] header = StringUtils.split(fileString.get(0), " ");
 			Integer numberOfSamples = Integer.parseInt(header[0]);
 			Integer attributesPerSample = Integer.parseInt(header[1]);
 
-			double[][] attributes = new double[attributesPerSample][numberOfSamples];
-			List<SampleDto> samples = new ArrayList<SampleDto>();
-			for (int i = 1; i < linesFile.size(); i++) {
-
-				List<Double> sampleAttr = new ArrayList<Double>();
-				String[] sample = StringUtils.split(linesFile.get(i), " ");
-				for (int j = 0; j < (sample.length - 1); j++) {
-
-					double value = Double.parseDouble(sample[j]);
-					sampleAttr.add(value);
-					attributes[j][i - 1] = value;
-				}
-				samples.add(new SampleDto(sample[sample.length - 1], sampleAttr));
-			}
-
-			double[][] attributesZscore = new double[attributesPerSample][numberOfSamples];
-			for (int i = 0; i < attributesPerSample; i++) {
-				for (int j = 0; j < attributes[i].length; j++) {
-
-					double zscore = new ZScore(attributes[i][j], attributes[i]).calculate();
-					attributesZscore[i][j] = zscore;
-				}
-			}
-
-			return new SampleFileDto(numberOfSamples, attributesPerSample, attributes, attributesZscore, samples);
+			List<SampleDto> samples = readSamples(fileString, numberOfSamples, attributesPerSample);
+			return new SampleFileDto(numberOfSamples, attributesPerSample, samples);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 			Messages.showErrorMessage(this.frame, this.bundle.getString("msg.arquivo.amostras.invalido"));
 			return null;
 		}
+	}
+
+	private List<SampleDto> readSamples(List<String> fileString, Integer numberOfSamples, Integer attributesPerSample) {
+
+		double[][] attributes = readAttributes(fileString, numberOfSamples, attributesPerSample);
+		if (this.frame.getChkZScore().isSelected()) {
+			attributes = calculateZScore(numberOfSamples, attributesPerSample, attributes);
+		}
+
+		List<SampleDto> samples = new ArrayList<SampleDto>();
+		for (int i = 1; i < fileString.size(); i++) {
+
+			String[] sample = StringUtils.split(fileString.get(i), " ");
+			List<Double> sampleAttr = new ArrayList<Double>();
+			for (int j = 0; j < (sample.length - 1); j++) {
+
+				sampleAttr.add(attributes[j][i - 1]);
+			}
+			String className = sample[sample.length - 1];
+			samples.add(new SampleDto(className, sampleAttr));
+		}
+
+		return samples;
+	}
+
+	private double[][] readAttributes(List<String> fileString, Integer numberOfSamples, Integer attributesPerSample) {
+
+		double[][] attributes = new double[attributesPerSample][numberOfSamples];
+		for (int i = 1; i < fileString.size(); i++) {
+
+			String[] sample = StringUtils.split(fileString.get(i), " ");
+			for (int j = 0; j < (sample.length - 1); j++) {
+
+				double value = Double.parseDouble(sample[j]);
+				attributes[j][i - 1] = value;
+			}
+		}
+		return attributes;
+	}
+
+	private double[][] calculateZScore(Integer numberOfSamples, Integer attributesPerSample, double[][] attributes) {
+
+		double[][] attributesZScore = new double[attributesPerSample][numberOfSamples];
+		for (int i = 0; i < attributesPerSample; i++) {
+			for (int j = 0; j < attributes[i].length; j++) {
+
+				double zscore = new ZScore(attributes[i][j], attributes[i]).calculate();
+				attributesZScore[i][j] = zscore;
+			}
+		}
+		return attributesZScore;
 	}
 
 	/**
@@ -212,6 +261,14 @@ public class FrameController {
 		} catch (Exception e) {
 			String msg = MessageFormat.format(this.bundle.getString("msg.campo.xxx.obrigatorio"),
 					this.bundle.getString("lblKFold.text"));
+			Messages.showWarningMessage(this.frame, msg);
+			return false;
+		}
+		try {
+			Integer.parseInt(this.frame.getTxtNumeroVizinhos().getText());
+		} catch (Exception e) {
+			String msg = MessageFormat.format(this.bundle.getString("msg.campo.xxx.obrigatorio"),
+					this.bundle.getString("lblNumeroVizinhos.text"));
 			Messages.showWarningMessage(this.frame, msg);
 			return false;
 		}

@@ -14,10 +14,6 @@ public class SampleFileDto {
 	@Getter
 	private Integer attributesPerSample;
 	@Getter
-	private double[][] attributes;
-	@Getter
-	private double[][] attributesZscore;
-	@Getter
 	private List<SampleDto> samples = new ArrayList<SampleDto>();
 
 }

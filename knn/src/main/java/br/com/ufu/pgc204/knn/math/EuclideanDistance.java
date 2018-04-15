@@ -1,29 +1,28 @@
 package br.com.ufu.pgc204.knn.math;
 
-import br.com.ufu.pgc204.knn.Distance;
-import lombok.Getter;
+import java.util.List;
+
+import org.apache.commons.lang3.ArrayUtils;
+
+import lombok.NoArgsConstructor;
 
 /**
  * @author Dali Freire <i>dalifreire@gmail.com</i>
  * @since 04/2018
  */
+@NoArgsConstructor
 public class EuclideanDistance implements Distance {
 
-	@Getter
-	private double[] p1;
-	@Getter
-	private double[] p2;
-
-	public EuclideanDistance(double[] p1, double[] p2) {
-		this.p1 = p1 != null ? p1 : new double[0];
-		this.p2 = p2 != null ? p2 : new double[0];
+	public double calculate(List<Double> p1, List<Double> p2) {
+		return calculate(ArrayUtils.toPrimitive(p1.toArray(new Double[] {})),
+				ArrayUtils.toPrimitive(p2.toArray(new Double[] {})));
 	}
 
-	public double calculate() {
-		if (this.p1.length == this.p2.length && this.p1.length > 0) {
+	public double calculate(double[] p1, double[] p2) {
+		if (p1.length == p2.length && p1.length > 0) {
 			double sum = 0;
-			for (int i = 0; i < this.p1.length; i++) {
-				double dp = this.p1[i] - this.p2[i];
+			for (int i = 0; i < p1.length; i++) {
+				double dp = p1[i] - p2[i];
 				sum += dp * dp;
 			}
 			return Math.sqrt(sum);
