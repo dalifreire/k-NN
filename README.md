@@ -10,7 +10,7 @@ O k-NN (do inglês: k Nearest Neighboors), é um algoritmo utilizado para resolv
 
 # Execução
 
-Um executável do algoritmo foi disponibilizado na pasta [dist](https://github.com/dalifreire/k-NN/tree/master/dist). Para executar a aplicação, basta realizar o download do arquivo [k-NN.jar](https://github.com/dalifreire/k-NN/tree/master/dist/k-NN.jar) e executá-lo:
+Um executável do algoritmo foi implementado utilizando Java/Swing e disponibilizado na pasta [dist](https://github.com/dalifreire/k-NN/tree/master/dist). Para executar a aplicação, basta realizar o download do arquivo [k-NN.jar](https://github.com/dalifreire/k-NN/tree/master/dist/k-NN.jar) e executá-lo:
 ```sh
 java -jar k-NN.jar
 ```
