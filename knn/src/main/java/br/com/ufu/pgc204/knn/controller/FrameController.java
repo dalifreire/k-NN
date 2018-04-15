@@ -28,7 +28,6 @@ import br.com.ufu.pgc204.knn.math.EuclideanDistance;
 import br.com.ufu.pgc204.knn.math.ZScore;
 import br.com.ufu.pgc204.knn.model.SampleDto;
 import br.com.ufu.pgc204.knn.model.SampleFileDto;
-import br.com.ufu.pgc204.knn.view.DialogAbout;
 import br.com.ufu.pgc204.knn.view.Frame;
 import br.com.ufu.pgc204.knn.view.Messages;
 import br.com.ufu.pgc204.knn.view.SplashWindow;
@@ -76,14 +75,6 @@ public class FrameController {
 			}
 		};
 		this.frame.addWindowListener(sair);
-
-		/* registra o evento/acao ao clicar no botao 'sobre' */
-		this.frame.getLblAbout().addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-				DialogAbout sobre = new DialogAbout(frame);
-				sobre.setVisible(true);
-			}
-		});
 
 		/* registra o evento/acao ao clicar no botao 'selecionar amostras' */
 		this.frame.getBtnSearch().addActionListener(new ActionListener() {

@@ -31,7 +31,6 @@ public class Frame extends JFrame {
 	private JLabel lblAmostras;
 	private JTextField txtAmostras;
 	private JButton btnSearch;
-	private JLabel lblAbout;
 	private JLabel lblKFold;
 	private JTextField txtKFold;
 	private JCheckBox chkZScore;
@@ -97,9 +96,6 @@ public class Frame extends JFrame {
 		c.gridx = 2; // terceira coluna
 		pane.add(getBtnSearch(), c);
 
-		c.gridx = 3; // quarta coluna
-		pane.add(getLblAbout(), c);
-
 		c.gridx = 0; // primeira coluna
 		c.gridy = 1; // segunda linha
 		pane.add(getLblKFold(), c);
@@ -158,17 +154,6 @@ public class Frame extends JFrame {
 			this.btnSearch.setPreferredSize(new Dimension(36, 26));
 		}
 		return this.btnSearch;
-	}
-
-	public JLabel getLblAbout() {
-		if (this.lblAbout == null) {
-			this.lblAbout = new JLabel();
-			this.lblAbout.setPreferredSize(new Dimension(28, 26));
-			this.lblAbout.setIcon(new ImageIcon(getClass().getResource("/br/com/ufu/pgc204/knn/images/sobre.gif")));
-			this.lblAbout.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-			this.lblAbout.setToolTipText(bundle.getString("lblAbout.toolTipText"));
-		}
-		return this.lblAbout;
 	}
 
 	private JLabel getLblKFold() {
