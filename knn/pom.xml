@@ -13,6 +13,7 @@
 
 		<commons.lang.version>3.7</commons.lang.version>
 		<commons.io.version>2.6</commons.io.version>
+		<commons.collections.version>4.1</commons.collections.version>
 		<commons.math.version>3.6.1</commons.math.version>
 		<lombok.version>1.16.20</lombok.version>
 		<junit.version>4.12</junit.version>
@@ -32,6 +33,13 @@
 			<artifactId>commons-io</artifactId>
 			<version>${commons.io.version}</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-collections4</artifactId>
+			<version>${commons.collections.version}</version>
+		</dependency>
+
 
 		<dependency>
 			<groupId>org.projectlombok</groupId>

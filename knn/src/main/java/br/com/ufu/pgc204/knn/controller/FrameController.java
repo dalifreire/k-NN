@@ -22,6 +22,7 @@ import javax.swing.UIManager;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import br.com.ufu.pgc204.knn.KFold;
 import br.com.ufu.pgc204.knn.KNN;
 import br.com.ufu.pgc204.knn.math.EuclideanDistance;
 import br.com.ufu.pgc204.knn.math.ZScore;
@@ -143,19 +144,22 @@ public class FrameController {
 		if (checkFields()) {
 
 			SampleFileDto samples = readSampleFile();
-			Integer kfold = Integer.parseInt(this.frame.getTxtKFold().getText());
-			Integer k = Integer.parseInt(this.frame.getTxtNumeroVizinhos().getText());
+			Integer kFoldValue = Integer.parseInt(this.frame.getTxtKFold().getText());
+			Integer knnValue = Integer.parseInt(this.frame.getTxtNumeroVizinhos().getText());
 
-			if (samples.getNumberOfSamples() % kfold == 0) {
+			if (samples.getNumberOfSamples() % kFoldValue == 0) {
+
+				KFold kfold = new KFold(knnValue, kFoldValue, samples.getSamples());
+				kfold.execute();
 
 				// TODO
 				List<Double> sample = Arrays.asList(4.9, 3.0, 1.4, 0.2);
 
 				KNN classifier = new KNN(samples);
-				String className = classifier.classify(sample, new EuclideanDistance(), k);
-				List<SampleDto> kElements = classifier.kElements(sample, new EuclideanDistance(), k);
+				String className = classifier.classify(sample, new EuclideanDistance(), knnValue);
+				List<SampleDto> kElements = classifier.kElements(sample, new EuclideanDistance(), knnValue);
 				System.out.println(kElements);
-				
+
 			} else {
 
 				String msg = MessageFormat.format(this.bundle.getString("msg.informe.valor.divisor.para.kfold"),
@@ -256,16 +260,30 @@ public class FrameController {
 			Messages.showWarningMessage(this.frame, msg);
 			return false;
 		}
+
 		try {
-			Integer.parseInt(this.frame.getTxtKFold().getText());
+			Integer kfold = Integer.parseInt(this.frame.getTxtKFold().getText());
+			if (kfold < 2) {
+				String msg = MessageFormat.format(this.bundle.getString("msgs.informe.valor.valido.para.xxx"),
+						this.bundle.getString("lblKFold.text"));
+				Messages.showWarningMessage(this.frame, msg);
+				return false;
+			}
 		} catch (Exception e) {
 			String msg = MessageFormat.format(this.bundle.getString("msg.campo.xxx.obrigatorio"),
 					this.bundle.getString("lblKFold.text"));
 			Messages.showWarningMessage(this.frame, msg);
 			return false;
 		}
+
 		try {
-			Integer.parseInt(this.frame.getTxtNumeroVizinhos().getText());
+			Integer knn = Integer.parseInt(this.frame.getTxtNumeroVizinhos().getText());
+			if (knn < 1) {
+				String msg = MessageFormat.format(this.bundle.getString("msgs.informe.valor.valido.para.xxx"),
+						this.bundle.getString("lblNumeroVizinhos.text"));
+				Messages.showWarningMessage(this.frame, msg);
+				return false;
+			}
 		} catch (Exception e) {
 			String msg = MessageFormat.format(this.bundle.getString("msg.campo.xxx.obrigatorio"),
 					this.bundle.getString("lblNumeroVizinhos.text"));
