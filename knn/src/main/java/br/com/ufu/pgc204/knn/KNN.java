@@ -1,5 +1,6 @@
 package br.com.ufu.pgc204.knn;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -11,17 +12,18 @@ import java.util.TreeSet;
 
 import br.com.ufu.pgc204.knn.math.Distance;
 import br.com.ufu.pgc204.knn.model.SampleDto;
-import br.com.ufu.pgc204.knn.model.SampleFileDto;
-import lombok.AllArgsConstructor;
 
 /**
  * @author Dali Freire <i>dalifreire@gmail.com</i>
  * @since 04/2018
  */
-@AllArgsConstructor
 public class KNN {
 
-	private SampleFileDto data;
+	private List<SampleDto> samples;
+
+	public KNN(List<SampleDto> samples) {
+		this.samples = clone(samples);
+	}
 
 	public String classify(List<Double> sample, Distance distance, int k) {
 
@@ -64,28 +66,34 @@ public class KNN {
 
 	public List<SampleDto> kElements(List<Double> sample, Distance distance, int k) {
 
-		List<SampleDto> samples = this.data.getSamples();
-
 		/* k eh maior do que todos os elementos do conjunto de amostras? */
-		if (k >= samples.size()) {
+		if (k >= this.samples.size()) {
 			return samples;
 		}
 
 		/* calcula a distancia entre a amostra e todos os elementos do conjunto */
-		for (SampleDto s : samples) {
+		for (SampleDto s : this.samples) {
 			double d = distance.calculate(s.getAttributes(), sample);
 			s.setDistance(d);
 		}
 
 		/* Ordena as amostras pela distancia */
-		Collections.sort(samples, new Comparator<SampleDto>() {
+		Collections.sort(this.samples, new Comparator<SampleDto>() {
 			public int compare(SampleDto o1, SampleDto o2) {
 				return o1.getDistance().compareTo(o2.getDistance());
 			}
 		});
 
 		/* retorna os k elementos mais proximos */
-		return samples.subList(0, k);
+		return this.samples.subList(0, k);
+	}
+
+	private List<SampleDto> clone(List<SampleDto> samples) {
+		List<SampleDto> samplesCopy = new ArrayList<SampleDto>();
+		for (SampleDto s : samples) {
+			samplesCopy.add(s.clone());
+		}
+		return samplesCopy;
 	}
 
 }

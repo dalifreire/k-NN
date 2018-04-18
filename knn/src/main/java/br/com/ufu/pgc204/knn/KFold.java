@@ -1,41 +1,70 @@
 package br.com.ufu.pgc204.knn;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.collections4.ListUtils;
+import org.apache.commons.lang3.StringUtils;
 
+import br.com.ufu.pgc204.knn.math.EuclideanDistance;
 import br.com.ufu.pgc204.knn.model.SampleDto;
-import lombok.AllArgsConstructor;
 
-@AllArgsConstructor
 public class KFold {
 
 	private Integer knnValue;
 	private Integer kFoldValue;
 	private List<SampleDto> samples = new ArrayList<SampleDto>();
 
-	public void execute() {
+	public KFold(Integer knnValue, Integer kFoldValue, List<SampleDto> samples) {
+		super();
+		this.knnValue = knnValue;
+		this.kFoldValue = kFoldValue;
+		this.samples = clone(samples);
+	}
+
+	public double execute() {
+
+		/* coloca as amostras em ordem aleatoria */
+		Collections.shuffle(this.samples);
 
 		/* particiona o conjunto de amostras em k particoes */
 		int partitionSize = this.samples.size() / this.kFoldValue;
 		List<List<SampleDto>> kFoldLists = ListUtils.partition(this.samples, partitionSize);
 
+		/* quantidade de acertos */
+		int countSuccess = 0;
+		
+		/* itera sobre a quantidade de particoes */
 		for (int i = 0; i < this.kFoldValue; i++) {
 
 			/* utiliza k-1 particoes para o treinamento */
+			List<SampleDto> training = new ArrayList<SampleDto>();
 			for (int j = 0; j < this.kFoldValue; j++) {
 				if (j != i) {
-
-					List<SampleDto> training = kFoldLists.get(j);
+					training.addAll(kFoldLists.get(j));
 				}
 			}
 
-			/* utiliza 1 particao para o validacao */
+			/* utiliza 1 particao para a validacao */
 			List<SampleDto> test = kFoldLists.get(i);
-
+			for (SampleDto s : test) {
+				
+				String className = new KNN(training).classify(s.getAttributes(), new EuclideanDistance(), this.knnValue);
+				if (StringUtils.equals(s.getClassName(), className)) {
+					countSuccess++;
+				}
+			}
 		}
+		return Double.valueOf(Double.valueOf(countSuccess)/Double.valueOf(this.samples.size()));
+	}
 
+	private List<SampleDto> clone(List<SampleDto> samples) {
+		List<SampleDto> samplesCopy = new ArrayList<SampleDto>();
+		for (SampleDto s : samples) {
+			samplesCopy.add(s.clone());
+		}
+		return samplesCopy;
 	}
 
 }

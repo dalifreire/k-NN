@@ -10,8 +10,8 @@ import java.awt.event.WindowListener;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -23,8 +23,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import br.com.ufu.pgc204.knn.KFold;
-import br.com.ufu.pgc204.knn.KNN;
-import br.com.ufu.pgc204.knn.math.EuclideanDistance;
 import br.com.ufu.pgc204.knn.math.ZScore;
 import br.com.ufu.pgc204.knn.model.SampleDto;
 import br.com.ufu.pgc204.knn.model.SampleFileDto;
@@ -141,15 +139,8 @@ public class FrameController {
 			if (samples.getNumberOfSamples() % kFoldValue == 0) {
 
 				KFold kfold = new KFold(knnValue, kFoldValue, samples.getSamples());
-				kfold.execute();
-
-				// TODO
-				List<Double> sample = Arrays.asList(4.9, 3.0, 1.4, 0.2);
-
-				KNN classifier = new KNN(samples);
-				String className = classifier.classify(sample, new EuclideanDistance(), knnValue);
-				List<SampleDto> kElements = classifier.kElements(sample, new EuclideanDistance(), knnValue);
-				System.out.println(kElements);
+				double precisionTax = kfold.execute();
+				Messages.showInformationMessage(this.frame, String.format("Taxa de acerto: %s", NumberFormat.getPercentInstance().format(precisionTax)));
 
 			} else {
 

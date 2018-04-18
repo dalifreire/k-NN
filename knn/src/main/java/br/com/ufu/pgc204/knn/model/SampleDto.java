@@ -10,7 +10,7 @@ import lombok.ToString;
 
 @ToString(includeFieldNames = true)
 @NoArgsConstructor
-public class SampleDto {
+public class SampleDto implements Cloneable {
 
 	@Getter
 	@Setter
@@ -23,6 +23,16 @@ public class SampleDto {
 	public SampleDto(String className, List<Double> attributes) {
 		this.className = className;
 		this.attributes = attributes;
+	}
+
+	@Override
+	public SampleDto clone() {
+		try {
+			return (SampleDto) super.clone();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
 	}
 
 }
