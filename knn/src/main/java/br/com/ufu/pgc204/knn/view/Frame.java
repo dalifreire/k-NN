@@ -166,7 +166,7 @@ public class Frame extends JFrame {
 
 	public JTextField getTxtKFold() {
 		if (this.txtKFold == null) {
-			this.txtKFold = new JNumberField(2);
+			this.txtKFold = new JNumberField(3);
 			this.txtKFold.setText("10");
 		}
 		return this.txtKFold;

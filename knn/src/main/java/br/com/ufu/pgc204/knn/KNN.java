@@ -66,7 +66,7 @@ public class KNN {
 
 	public List<SampleDto> kElements(List<Double> sample, Distance distance, int k) {
 
-		/* k eh maior do que todos os elementos do conjunto de amostras? */
+		/* k eh maior do que a quantidade de elementos do conjunto de amostras? */
 		if (k >= this.samples.size()) {
 			return samples;
 		}
@@ -84,7 +84,7 @@ public class KNN {
 			}
 		});
 
-		/* retorna os k elementos mais proximos */
+		/* retorna os k elementos com a menor distancia */
 		return this.samples.subList(0, k);
 	}
 

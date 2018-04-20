@@ -27,7 +27,7 @@ public class EuclideanDistance implements Distance {
 			}
 			return Math.sqrt(sum);
 		}
-		return 0.0;
+		return Double.MAX_VALUE;
 	}
 
 }

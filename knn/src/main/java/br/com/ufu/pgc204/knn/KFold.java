@@ -10,6 +10,10 @@ import org.apache.commons.lang3.StringUtils;
 import br.com.ufu.pgc204.knn.math.EuclideanDistance;
 import br.com.ufu.pgc204.knn.model.SampleDto;
 
+/**
+ * @author Dali Freire <i>dalifreire@gmail.com</i>
+ * @since 04/2018
+ */
 public class KFold {
 
 	private Integer knnValue;
@@ -25,10 +29,10 @@ public class KFold {
 
 	public double execute() {
 
-		/* coloca as amostras em ordem aleatoria */
+		/* coloca o conjunto de amostras em ordem aleatoria */
 		Collections.shuffle(this.samples);
 
-		/* particiona o conjunto de amostras em k particoes */
+		/* particiona o conjunto de amostras em k particoes (k-fold) */
 		int partitionSize = this.samples.size() / this.kFoldValue;
 		List<List<SampleDto>> kFoldLists = ListUtils.partition(this.samples, partitionSize);
 
@@ -50,13 +54,18 @@ public class KFold {
 			List<SampleDto> test = kFoldLists.get(i);
 			for (SampleDto s : test) {
 				
+				/* obtem a classe da amostra de validacao executando o KNN no conjunto de treinamento */
 				String className = new KNN(training).classify(s.getAttributes(), new EuclideanDistance(), this.knnValue);
+				
+				/* verifica se a classe da amostra de validacao eh a mesma obtida pela execucao do KNN no conjunto de treinamento */
 				if (StringUtils.equals(s.getClassName(), className)) {
 					countSuccess++;
 				}
 			}
 		}
-		return Double.valueOf(Double.valueOf(countSuccess)/Double.valueOf(this.samples.size()));
+		
+		/* calcula a taxa de acerto */
+		return Double.valueOf(countSuccess)/Double.valueOf(this.samples.size());
 	}
 
 	private List<SampleDto> clone(List<SampleDto> samples) {
