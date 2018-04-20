@@ -26,7 +26,7 @@ public class KNNTest {
 		KNN knn = new KNN(samples);
 		String classe = knn.classify(Arrays.asList(new Double[] { 1.0, 2.0, 3.0, 4.0, 5.0, 6.0 }),
 				new EuclideanDistance(), 3);
-		Assert.assertEquals("classe 1", classe, 0.0);
+		Assert.assertEquals("classe 1", classe);
 
 	}
 

@@ -22,6 +22,14 @@ Também é possível clonar o repositório e realizar a execução direta do fon
 
 * [br.com.ufu.pgc204.knn.controller.FrameController](https://github.com/dalifreire/k-NN/blob/master/knn/src/main/java/br/com/ufu/pgc204/knn/controller/FrameController.java)
 
+
+As principais classes criadas nessa implementação podem ser encontradas nos seguintes pacotes:
+
+* [br.com.ufu.pgc204.knn](https://github.com/dalifreire/k-NN/tree/master/knn/src/main/java/br/com/ufu/pgc204/knn)
+* [br.com.ufu.pgc204.knn.math](https://github.com/dalifreire/k-NN/tree/master/knn/src/main/java/br/com/ufu/pgc204/knn/math)
+
+Instruções para baixar o fonte diretamente como um projeto maven no eclipse:
+
 ![eclipse-001](https://user-images.githubusercontent.com/10319140/38783905-a26b9674-40df-11e8-8306-a884ff0d30b2.png)
 
 ![eclipse-002](https://user-images.githubusercontent.com/10319140/38783929-18db1348-40e0-11e8-9285-5aeb461b140a.png)
