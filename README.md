@@ -20,7 +20,7 @@ java -jar k-NN.jar
 
 Também é possível clonar o repositório e realizar a execução direta do fonte.. a classe main para a execução da aplicação é a seguinte:
 
-* [br.com.ufu.pgc204.knn.controller.FrameController](https://github.com/dalifreire/k-NN/blob/master/knn/src/main/java/br/com/ufu/pgc204/knn/controller/FrameController.java)
+* [br.com.ufu.pgc204.knn.controller.FrameController](https://github.com/dalifreire/k-NN/blob/master/knn/src/main/java/br/com/ufu/pgc204/knn/controller/FrameController.java#L132)
 
 
 As principais classes criadas nessa implementação podem ser encontradas nos seguintes pacotes:
