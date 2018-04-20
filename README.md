@@ -26,7 +26,14 @@ Também é possível clonar o repositório e realizar a execução direta do fon
 As principais classes criadas nessa implementação podem ser encontradas nos seguintes pacotes:
 
 * [br.com.ufu.pgc204.knn](https://github.com/dalifreire/k-NN/tree/master/knn/src/main/java/br/com/ufu/pgc204/knn)
+	* [KFold.java](https://github.com/dalifreire/k-NN/blob/master/knn/src/main/java/br/com/ufu/pgc204/knn/KFold.java)
+	* [KNN.java](https://github.com/dalifreire/k-NN/blob/master/knn/src/main/java/br/com/ufu/pgc204/knn/KNN.java)
 * [br.com.ufu.pgc204.knn.math](https://github.com/dalifreire/k-NN/tree/master/knn/src/main/java/br/com/ufu/pgc204/knn/math)
+	* [Average.java](https://github.com/dalifreire/k-NN/blob/master/knn/src/main/java/br/com/ufu/pgc204/knn/math/Average.java)
+	* [EuclideanDistance.java](https://github.com/dalifreire/k-NN/blob/master/knn/src/main/java/br/com/ufu/pgc204/knn/math/EuclideanDistance.java)
+	* [StandardDeviation.java](https://github.com/dalifreire/k-NN/blob/master/knn/src/main/java/br/com/ufu/pgc204/knn/math/StandardDeviation.java)
+	* [Variance.java](https://github.com/dalifreire/k-NN/blob/master/knn/src/main/java/br/com/ufu/pgc204/knn/math/Variance.java)
+	* [ZScore.java](https://github.com/dalifreire/k-NN/blob/master/knn/src/main/java/br/com/ufu/pgc204/knn/math/ZScore.java)
 
 Instruções para baixar o fonte diretamente como um projeto maven no eclipse:
 
